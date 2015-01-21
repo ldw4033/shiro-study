@@ -7,11 +7,12 @@ import org.apache.shiro.config.IniSecurityManagerFactory;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.Factory;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class BaseTest {
 	@Test
-	public void test01(){
+	public void testHelloworld(){
 		//1、获取SecurityManager工厂，此处使用的是ini配置文件初始化SecurityManager
 		Factory<SecurityManager> factory=new IniSecurityManagerFactory("classpath:shiro.ini");
 		//2、得到SecurityManager实例，并绑定到SecurityUtils
@@ -35,5 +36,29 @@ public class BaseTest {
 		currentUser.logout();
 		
 	}
+	@Test
+	public void testCustomRealm(){
+		Factory<SecurityManager> factory = new IniSecurityManagerFactory("classpath:shiro-realm.ini");
+		SecurityManager securityManagey=factory.getInstance();
+		SecurityUtils.setSecurityManager(securityManagey);
+		Subject currentUser=SecurityUtils.getSubject();
+		
+		UsernamePasswordToken token =new  UsernamePasswordToken("liudianwei", "123");
+		
+		try {
+			currentUser.login(token);
+		} catch (AuthenticationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		Assert.assertEquals(true, currentUser.isAuthenticated()); //断言用户已经登录
+		currentUser.logout();
+		
+		
+		
+ 	}
+	
 
 }
