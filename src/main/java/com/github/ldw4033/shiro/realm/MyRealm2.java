@@ -6,8 +6,8 @@
  * and shall use it only in accordance with the terms of the agreements   
  * you entered into with LanYoung tech.   
  *   
- */     
-package com.github.ldw4033.shiro.realm;    
+ */
+package com.github.ldw4033.shiro.realm;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -19,12 +19,12 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.realm.Realm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-    
-public class MyRealm1 implements Realm{
-	private static Logger log=LoggerFactory.getLogger(MyRealm1.class);
+
+public class MyRealm2 implements Realm {
+	private static Logger log = LoggerFactory.getLogger(MyRealm2.class);
 
 	public String getName() {
-		return "myRealm1";
+		return "myRealm2";
 	}
 
 	public boolean supports(AuthenticationToken token) {
@@ -32,22 +32,18 @@ public class MyRealm1 implements Realm{
 	}
 
 	public AuthenticationInfo getAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-		String username=(String) token.getPrincipal();
-		//String password=(String) token.getCredentials();
-		String password=new String((char[]) token.getCredentials());
+		String username = (String) token.getPrincipal();
+		String password = new String((char[]) token.getCredentials());
 		log.info(username);
 		log.info(password);
-		
-		if(!"ldw4033".equals(username)){
-			throw new UnknownAccountException("用户名不存在");
+		if (!"zhangsan".equals(username)) {
+			throw new UnknownAccountException();
 		}
-		
-		if(!"123".equals(password)){
-			throw new IncorrectCredentialsException("用户密码错误");
+		if (!"123".equals(password)) {
+			throw new IncorrectCredentialsException("密码错误");
 		}
-		
+
 		return new SimpleAuthenticationInfo(username, password, getName());
 	}
 
 }
-  
